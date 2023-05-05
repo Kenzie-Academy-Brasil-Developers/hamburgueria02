@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { StyledShopPage } from './style';
 import CartModal from '../../components/CartModal';
 import Header from '../../components/Header';
@@ -12,7 +12,7 @@ const ShopPage = () => {
   return (
     <StyledShopPage>
       <CartModal isOpen={openModal} setOpenModal={setOpenModal} />
-      <Header />
+      <Header/>
       <main>
         <StyledContainer containerWidth={1300}>
           <ProductList />

@@ -1,25 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import ProductCard from './ProductCard';
 import { StyledProductList } from './style';
-import { api } from '../../services/api';
+import { CartContext } from '../../providers/CartContext/CartContext';
 
 const ProductList = () => {
-  const [productList, setProductList] = useState([]);
-  useEffect(() => {
-    async function loadProduct() {
-      try {
-        const response = await api.get('products');
-        setProductList(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    loadProduct();
-  }, []);
-
+  const { productList } = useContext(CartContext);
   return (
     <StyledProductList>
-      <ProductCard />
+      {productList.map((product) => (
+        <ProductCard
+          key={product.id}
+          name={product.name}
+          category={product.category}
+          price={product.price}
+          img={product.img}
+          id={product.id}
+        />
+      ))}
     </StyledProductList>
   );
 };

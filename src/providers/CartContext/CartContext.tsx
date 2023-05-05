@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
+import toast from 'react-hot-toast';
 import { api } from '../../services/api';
 
 export interface ICartProduct {
@@ -27,11 +28,19 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const [productList, setProductList] = useState<ICartProduct[]>([]);
   useEffect(() => {
     async function loadProduct() {
-      try {
-        const response = await api.get<ICartProduct[]>('/products');
-        setProductList(response.data);
-      } catch (error) {
-        console.log(error);
+      const token = localStorage.getItem('@TOKEN');
+
+      if (token) {
+        try {
+          const response = await api.get<ICartProduct[]>('/products', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setProductList(response.data);
+        } catch (error) {
+          toast.error('Falhou');
+        }
       }
     }
     loadProduct();
@@ -43,7 +52,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     if (!cartList.some((product) => product.id === cartProduct.id)) {
       setCartList([...cartList, cartProduct]);
     } else {
-      alert('Produto já adicionado.');
+      toast.error('Produto já adicionado.');
     }
   };
 

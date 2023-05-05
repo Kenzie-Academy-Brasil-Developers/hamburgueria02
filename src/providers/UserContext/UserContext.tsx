@@ -18,30 +18,29 @@ export const UserProvider = ({ children }: IDefaultProviderProps) => {
 
   const navigate = useNavigate();
 
-  const userLoad = async () => {
-    const token = localStorage.getItem('@TOKEN');
-
-    if (token) {
-      try {
-        setLoading(true);
-        const response = await api.get('/users', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(response.data);
-        navigate('/shop');
-      } catch (error) {
-        setUser(null);
-        localStorage.removeItem('@TOKEN');
-        toast.error('Falhou!');
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
   useEffect(() => {
+    const userLoad = async () => {
+      const token = localStorage.getItem('@TOKEN');
+      const userId = localStorage.getItem('@USERID');
+
+      if (token) {
+        try {
+          const response = await api.get(`/users/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(response.data);
+          navigate('/shop');
+          setLoading(false);
+        } catch (error) {
+          setUser(null);
+          localStorage.removeItem('@TOKEN');
+          toast.error('Falhou!');
+        }
+      }
+    };
+
     userLoad();
   }, []);
 
@@ -50,8 +49,7 @@ export const UserProvider = ({ children }: IDefaultProviderProps) => {
       setLoading(true);
       const response = await api.post('/users', formData);
       setUser(response.data.user);
-      localStorage.setItem('@TOKEN', response.data.accessToken);
-      navigate('/shop');
+      navigate('/');
       toast.success('Cadastro realizado!');
     } catch (error) {
       toast.error('Cadastro falhou!');
@@ -62,22 +60,22 @@ export const UserProvider = ({ children }: IDefaultProviderProps) => {
 
   const userLogin = async (formData: ILoginFormValues) => {
     try {
-      setLoading(true);
       const response = await api.post('/login', formData);
       setUser(response.data.user);
       localStorage.setItem('@TOKEN', response.data.accessToken);
+      localStorage.setItem('@USERID', response.data.user.id);
       navigate('/shop');
       toast.success('Login realizado com sucesso!');
+      setLoading(true);
     } catch (error) {
       toast.error('E-mail ou senha incorretos, tente novamente!');
-    } finally {
-      setLoading(false);
     }
   };
 
   const userLogout = () => {
     setUser(null);
     localStorage.removeItem('@TOKEN');
+    localStorage.removeItem('@USERID');
     navigate('/');
   };
 

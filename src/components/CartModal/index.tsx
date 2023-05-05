@@ -4,7 +4,12 @@ import CartProductList from './CartProductList';
 import { StyledCartModalBox } from './style';
 import { StyledParagraph, StyledTitle } from '../../styles/typography';
 
-function CartModal({ isOpen, setOpenModal }) {
+ interface IModal {
+  isOpen: boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function CartModal({ isOpen, setOpenModal } : IModal) {
   if (isOpen) {
     return (
       <StyledCartModalBox>

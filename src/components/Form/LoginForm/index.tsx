@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { UserContext } from '../../../providers/UserContext/UserContext';
 import { StyledButton } from '../../../styles/button';
 import { StyledForm } from '../../../styles/form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '../Input';
 import { TLoginSchema, loginSchema } from '../../../schemas/loginSchema';
 

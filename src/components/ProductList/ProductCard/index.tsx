@@ -1,18 +1,19 @@
 import { StyledProductCard } from './style';
 import { StyledButton } from '../../../styles/button';
 import { StyledParagraph, StyledTitle } from '../../../styles/typography';
+import { ICartProduct } from '../../../providers/CartContext/CartContext';
 
-const ProductCard = () => (
+const ProductCard = ( { name, category, price, img }: ICartProduct) => (
   <StyledProductCard>
     <div className='imageBox'>
-      <img src='https://i.imgur.com/Vng6VzV.png' alt='Hamburguer' />
+      <img src={img} alt={name} />
     </div>
     <div className='content'>
       <StyledTitle tag='h3' $fontSize='three'>
-        Hamburguer
+        {name}
       </StyledTitle>
-      <StyledParagraph className='category'>Sanduíches</StyledParagraph>
-      <StyledParagraph className='price'>R$ 14,00</StyledParagraph>
+      <StyledParagraph className='category'>{category}</StyledParagraph>
+      <StyledParagraph className='price'>R$ {price}</StyledParagraph>
       <StyledButton $buttonSize='medium' $buttonStyle='green'>
         Adicionar
       </StyledButton>
